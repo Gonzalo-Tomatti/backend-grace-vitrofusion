@@ -14,6 +14,27 @@ mongoose.connect(process.env.CONNECTION);
 
 app.use("/", require("./routes/login.js"));
 app.use("/", require("./routes/signup.js"));
+
+app.use(function verifyToken(req, res, next) {
+  // Get auth header value
+  const bearerHeader = req.headers["authorization"];
+  // Check if bearer is undefined
+  if (typeof bearerHeader !== "undefined") {
+    // Split at the space (since it's Bearer <access_token>)
+    const bearer = bearerHeader.split(" ");
+    // Get token from array
+    const bearerToken = bearer[1];
+    // Set the token
+    // console.log("bear", bearer[0]);
+    req.token = bearerToken;
+    // Next middleware
+    next();
+  } else {
+    // Forbidden
+    res.sendStatus(403);
+  }
+});
+
 app.use("/", require("./routes/get-purchases.js"));
 app.use("/", require("./routes/make-purchase.js"));
 
