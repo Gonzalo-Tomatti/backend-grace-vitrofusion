@@ -2,10 +2,10 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/users");
 
-router.route("/login/:username&:password").get((req, res) => {
-  const username = req.params.username;
+router.route("/login/:email&:password").get((req, res) => {
+  const email = req.params.email;
   const password = req.params.password;
-  User.find({ username: username, password: password }).then((foundUser) => {
+  User.find({ email: email, password: password }).then((foundUser) => {
     res.json(foundUser);
   });
 });
